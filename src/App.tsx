@@ -3,6 +3,7 @@ import "./App.css";
 import randomId from "random-id";
 import { Todo } from "./types/Todo.types";
 import { intialTodos } from "./constants/Todos";
+import React from "react"
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>(intialTodos);
@@ -18,6 +19,10 @@ function App() {
   const handleEditTodo = (id: string) => {
     setShowEditField(true);
     setEditId(id);
+    const getTextFromId = todos?.find((todo) => todo.id === id);
+    if (getTextFromId) {
+      setEditText(getTextFromId.text);
+    }
   };
 
   const handleTodoEdit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,27 +40,28 @@ function App() {
       setShowEditField(false);
       setEditText("");
     }
-   
-    
   };
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("text", text);
+    
     if (text !== "") {
       setTodos((prev) => [...prev, { id: randomId(5), text }]);
       setText("");
     }
-    
   };
   return (
     <div className="todo-container">
       <h1>Todo App</h1>
       <form action="" onSubmit={handleFormSubmit} className="todo-form">
-        <label>Add Todo: </label>
+        <label htmlFor="add-todo">Add Todo: </label>
         <input
           type="text"
-          name="todo"
+          name="add-todo"
+          id="add-todo"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          placeholder="Enter Todo"
         />
         <button>Enter</button>
       </form>
